@@ -1,0 +1,75 @@
+experiment:
+  name: edge_genegan_vimeo90k
+  output_dir: ./outputs/default
+  seed: 42
+  deterministic: false
+  num_workers: 4
+  amp: false
+  pin_memory: true
+
+data:
+  dataset: vimeo_septuplet
+  root: /mnt/sdc2/Vimeo-90k/vimeo_septuplet
+  edge_root: /mnt/sdc2/Vimeo-90k/vimeo_septuplet_edges
+  image_size: 256
+  edge_mode: offline_soft_edge
+  edge_channels: 1
+  max_gap_stage1: 3
+  max_gap_stage2: 5
+  history_len: 3
+  future_len: 4
+  num_workers: 4
+  split: train
+  split_file: sep_trainlist.txt
+  clip_len: 7
+  frame_index_start: 1
+
+model:
+  z_channels: 256
+  a_channels: 256
+  base_channels: 64
+  norm: instance
+  rgb_decoder_inject: adain
+  use_temporal_state: false
+  discriminator_channels: 64
+  discriminator_layers: 3
+  use_edge_adherence_module: true
+  edge_adherence_mode: sobel
+
+train:
+  stage: stage1
+  batch_size: 16
+  epochs: 100
+  lr_g: 0.0002
+  lr_d: 0.0002
+  betas: [0.5, 0.999]
+  grad_clip: 0.0
+  log_every: 100
+  vis_every: 500
+  save_every_epoch: 1
+  val_every_epoch: 1
+  resume: null
+
+loss:
+  lambda_rec: 10.0
+  lambda_swap: 10.0
+  lambda_shared: 2.0
+  lambda_null: 0.1
+  lambda_drift: 2.0
+  lambda_edge: 5.0
+  lambda_adv: 1.0
+  lambda_lpips: 1.0
+  lambda_cyc: 0.5
+  lambda_e_rec: 5.0
+  lambda_e_swap: 5.0
+  use_gan: true
+  use_lpips: true
+  use_cycle: false
+  e_use_bce: false
+
+infer:
+  appearance_pool: mean
+  save_png: true
+  save_mp4: true
+  mp4_fps: 8
+  save_grid_rows: 3

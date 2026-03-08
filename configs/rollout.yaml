@@ -1,0 +1,55 @@
+experiment:
+  name: edge_genegan_rollout
+  output_dir: ./outputs/rollout
+  seed: 42
+  deterministic: false
+  num_workers: 2
+  amp: false
+  pin_memory: true
+
+data:
+  dataset: vimeo_rollout
+  image_size: 256
+  edge_mode: offline_soft_edge
+  edge_channels: 1
+  history_len: 3
+  future_len: 4
+  split: test
+
+model:
+  z_channels: 256
+  a_channels: 256
+  base_channels: 64
+  norm: instance
+  rgb_decoder_inject: adain
+  use_temporal_state: false
+  discriminator_channels: 64
+  discriminator_layers: 3
+
+train:
+  stage: rollout
+  batch_size: 1
+  epochs: 1
+  amp: false
+
+loss:
+  lambda_rec: 10.0
+  lambda_swap: 10.0
+  lambda_shared: 2.0
+  lambda_null: 0.1
+  lambda_drift: 2.0
+  lambda_edge: 5.0
+  lambda_adv: 0.0
+  lambda_lpips: 1.0
+  lambda_cyc: 0.0
+  lambda_e_rec: 5.0
+  lambda_e_swap: 5.0
+  use_gan: false
+  use_lpips: false
+  use_cycle: false
+
+infer:
+  appearance_pool: mean
+  save_png: true
+  save_mp4: true
+  mp4_fps: 8

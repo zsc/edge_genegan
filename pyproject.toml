@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edge_genegan"
+version = "0.1.0"
+description = "Edge-guided video continuation via GeneGAN-style disentanglement"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "Pillow>=10.0",
+  "opencv-python>=4.8",
+  "pyyaml>=6.0",
+  "torch>=2.1",
+  "torchvision>=0.16",
+  "tqdm>=4.66",
+  "imageio>=2.31",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+video = [
+  "imageio[ffmpeg]>=2.31",
+  "imageio-ffmpeg>=0.4",
+]
+perceptual = [
+  "lpips>=0.1.4",
+]
+tensorboard = [
+  "tensorboard>=2.14",
+]
+
+[project.scripts]
+edge-genegan-train = "edge_genegan.cli.train:main"
+edge-genegan-validate = "edge_genegan.cli.validate:main"
+edge-genegan-rollout = "edge_genegan.cli.infer_rollout:main"
+edge-genegan-export = "edge_genegan.cli.export_samples:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["edge_genegan*"]
